@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Honey Jar",
+    "image": "3e6a5fca5fdaf0423214019ec9c10d1e.jpg",
+    "price": 5
+  },
+  {
+    "id": 2,
+    "name": "Olive Oil Bottle",
+    "image": "pure-photo2.jpg",
+    "price": 10
+  },
+  {
+    "id": 3,
+    "name": "Natural Soap",
+    "image": "beautiful-composition-spa-bath-concept_23-2148094085.avif",
+    "price": 7
+  },
+  {
+    "id": 4,
+    "name": "Mustafas sauce",
+    "image": "beautiful-bright-unusual-dish-author-s-performance-design-culinary-projects-beautiful-bright-appetizing-unusual-146636450.webp",
+    "price": 20
+  },
+  {
+    "id": 5,
+    "name": "Bottle of zamzam",
+    "image": "1.webp",
+    "price": 12
+  }
+]

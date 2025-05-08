@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="cart.css">
+    <title>Cart</title>
+  </head>
+  <body>
+   <div class="header-div">
+    <!-- Main cart heading -->
+    <h1 class="cart">Cart</h1> <a href="overview.html"><h4>Home</h4>
+  </div>
+
+    <!-- Container for displaying cart items -->
+    <table id="products"></table>
+
+    <!-- Container for action buttons -->
+    <div id="actions"></div>
+
+    <!-- Notification element -->
+    <div id="notification" class="notification-hidden"></div>
+  </body>
+  <script>
+    // DOM elements
+    const productsTable = document.getElementById("products");
+    const actions = document.getElementById("actions");
+    const notification = document.getElementById("notification");
+
+    // Get cart data from localStorage
+    const productsData = localStorage.getItem("cart");
+    const products = JSON.parse(productsData);
+
+    /**
+     * Displays cart contents and calculates total
+     * Shows empty message if cart is empty
+     * Adds action buttons if cart has items
+     */
+    if (products != null) {
+      let total = 0;
+      let html = "";
+
+      // Build product rows and calculate total
+      for (let product of products) {
+        total += product.price;
+        html += `
+        <tr>
+          <td>${product.name}</td>
+          <td>${product.price}</td>
+        </tr>
+      `;
+      }
+
+      // Add total row
+      html += `
+      <tr>
+        <td><b>Total</b></td>
+        <td>${total}</td>
+      </tr>
+        `;
+
+      productsTable.innerHTML = html;
+
+      // Add action buttons
+      actions.innerHTML += `<button class="btn-empty-cart" onClick="emptyCart()">Empty cart</button>`;
+      actions.innerHTML += `<button class="btn-place-order" onClick="placeOrder()">Place order</button>`;
+    } else {
+      productsTable.innerHTML = "No products in cart";
+    }
+
+    /**
+     * Clears the cart by removing it from localStorage
+     * Updates the UI to show empty state
+     */
+    function emptyCart() {
+      localStorage.removeItem("cart");
+      productsTable.innerHTML = "Cart is empty";
+      actions.innerHTML = "";
+      showNotification("Cart has been emptied", "info");
+    }
+
+    /**
+     * Shows a notification message
+     * @param {string} message - The message to display
+     * @param {string} type - The type of notification (success, error, info)
+     */
+    function showNotification(message, type) {
+      notification.textContent = message;
+      notification.className = `notification-${type}`;
+
+      // Hide notification after 3 seconds
+      setTimeout(() => {
+        notification.className = "notification-hidden";
+      }, 3000);
+    }
+
+    /**
+     * Places an order by:
+     * 1. Adding current cart to orders in localStorage
+     * 2. Clearing the cart
+     * 3. Updating UI to show success message
+     */
+    function placeOrder() {
+      let orders = localStorage.getItem("orders");
+
+      // Initialize orders array if it doesn't exist
+      if (orders == null) {
+        orders = [];
+      } else {
+        orders = JSON.parse(orders);
+      }
+
+      // Add current products to orders
+      orders.push(products);
+
+      // Update UI and storage
+      productsTable.innerHTML = "Order placed";
+      localStorage.removeItem("cart");
+      actions.innerHTML = "";
+      localStorage.setItem("orders", JSON.stringify(orders));
+
+      // Show success notification
+      showNotification("Order placed successfully!", "success");
+    }
+  </script>
+</html>

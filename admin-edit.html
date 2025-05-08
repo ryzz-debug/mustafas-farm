@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Product</title>
+  </head>
+  <body>
+    <!-- Product name display -->
+    <h1 id="product-name"></h1>
+
+    <!-- Price input field -->
+    <input id="price-input" />
+
+    <!-- Save changes button -->
+    <button id="edit-button">Edit</button>
+  </body>
+  <script>
+    /**
+     * Extracts product ID from URL path
+     * Example: "/admin/123" returns "123"
+     */
+    const pathParts = window.location.pathname.split("/");
+    const id = pathParts[pathParts.length - 1];
+
+    // DOM elements
+    const priceInput = document.getElementById("price-input");
+    const editButton = document.getElementById("edit-button");
+    const productName = document.getElementById("product-name");
+
+    /**
+     * Fetches product details from server and populates the form
+     * - Sets product name as heading
+     * - Pre-fills current price in input field
+     */
+    fetch(`http://localhost:3000/products/${id}`)
+      .then((res) => {
+        return res.json(); // Parse JSON response
+      })
+      .then((data) => {
+        productName.innerHTML = data.name; // Display product name
+        priceInput.value = data.price;     // Set current price
+      })
+      // Consider adding .catch() for error handling
+      // .catch(error => console.error('Error loading product:', error));
+
+    /**
+     * Handles edit button click event
+     * Sends updated price to server via PATCH request
+     */
+    editButton.addEventListener("click", () => {
+      const newPrice = priceInput.value;
+
+      /**
+       * Updates product dprice on server
+       * @param {string} id - Product ID from URL
+       * @param {string} newPrice - Updated price from input field
+       */
+      fetch(`http://localhost:3000/products/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          price: newPrice,
+        }),
+      })
+      // Consider adding response handling:
+      // .then(response => {
+      //   if (response.ok) alert('Price updated successfully!');
+      //   else alert('Update failed');
+      // })
+      // .catch(error => console.error('Error:', error));
+
+      console.log("New price submitted:", newPrice); // Debug log
+    });
+  </script>
+</html>

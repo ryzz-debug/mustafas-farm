@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="overview.css"> <!-- Link naar CSS stylesheet -->
+    <title>Product bestel</title> <!-- Paginatitel -->
+
+  </head>
+  <body>
+    <div class="header-div">
+      <h1 class="head-text">Buy your bio products here !</h1>
+    </div>
+    <a href="cart.html"><h3 id="h3-cart"> Cart</h3></a>
+
+    <!-- Melding div - aanvulling -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Container waar producten worden weergegeven -->
+    <div class="products" id="products"></div>
+  </body>
+  <script>
+    // Haal de product container en winkelwagen buttons op
+    const products = document.getElementById("products");
+    const addToCartButton = document.getElementsByClassName("add-to-cart");
+
+    // Fetch product data van de server
+    fetch("http://localhost:3000/products")
+      .then((response) => {
+        return response.json(); // Converteer response naar JSON
+      })
+      .then((data) => {
+        let html = ""; // Bouw HTML string op
+
+        // Loop door alle producten en maak HTML voor elk product
+        for (let product of data) {
+          html += `
+            <div class= "products-bestellen">
+              <img class= "image" src=${product.image} /> <!-- Productafbeelding -->
+              <h3>${product.name}</h3> <!-- Productnaam -->
+              <span> € ${product.price}</span> <!-- Productprijs -->
+              <!-- Voeg toe aan winkelwagen knop met productdata -->
+              <button class="add-to-cart" data-product='${JSON.stringify(
+                product
+              )}' onClick="addToCart(event)">+</button>
+            </div>
+          `;
+
+          products.innerHTML = html; // Update de DOM
+        }
+      });
+
+    // Functie om product aan winkelwagen toe te voegen
+    function addToCart(event) {
+      // Haal productdata op van button attribute
+      const productData = event.target.getAttribute("data-product");
+      console.log(productData);
+      const product = JSON.parse(productData);
+
+      // Haal huidige winkelwagen op uit localStorage
+      let cart = localStorage.getItem("cart");
+
+      // Als winkelwagen leeg is maak nieuwe array
+      if (cart == null) {
+        cart = [];
+      } else {
+        cart = JSON.parse(cart); // Parse bestaande winkelwagen
+      }
+
+      cart.push(product); // Voeg product toe aan winkelwagen
+
+      // Sla bijgewerkte winkelwagen op in localStorage
+      localStorage.setItem("cart", JSON.stringify(cart));
+
+      // Toon melding - nieuwe code
+      showNotification(`${product.name} toegevoegd aan winkelwagen!`);
+    }
+
+    // Nieuwe functie voor melding - aanvulling
+    function showNotification(message) {
+      const notification = document.getElementById("notification");
+      notification.textContent = message;
+      notification.classList.add("show");
+
+      // Verberg melding na 3 seconden
+      setTimeout(() => {
+        notification.classList.remove("show");
+      }, 3000);
+    }
+  </script>
+</html>

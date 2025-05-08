@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./edit.css">
+  <title>Edit - Add New Product</title>
+</head>
+
+<body>
+  <div class="geheel">
+    <!-- Product creation form -->
+    <h1>New Product</h1>
+    <div class="product-display">
+      <!-- Product name input -->
+      <label class="label-product " class="name-of">Name</label>
+      <input id="name" type="text" />
+
+      <!-- Image URL input -->
+      <label class="name-of">Image</label>
+      <input id="image" type="text" />
+
+      <!-- Price input -->
+      <label class="name-of">Price</label>
+      <input id="price" type="text" />
+    </div>
+
+    <!-- Submit button -->
+    <button class="add-product-btn" onclick="addProduct()">Add Product</button>
+  </div>
+  <button id="home-btn"> <a href="overview.html"> home-btn</a></button>
+</body>
+<script>
+  /**
+   * Handles product creation by:
+   * 1. Collecting form data
+   * 2. Creating a product object
+   * 3. Sending to server via POST request
+   */
+  function addProduct() {
+    // Get form values
+    const name = document.getElementById("name").value;
+    const image = document.getElementById("image").value;
+    const price = document.getElementById("price").value;
+
+    // Create product object
+    // Price is converted to Number type
+    const product = {
+      name: name,
+      image: image,
+      price: Number(price)
+    };
+
+    /**
+     * Send product data to server
+     * @param {string} url - API endpoint (/products)
+     * @param {object} options - Fetch options
+     *   - method: POST
+     *   - headers: JSON content type
+     *   - body: Stringified product object
+     */
+    fetch("http://localhost:3000/products", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(product),
+    });
+
+  }
+</script>
+
+</html>

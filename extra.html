@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="extra.css">
+    <title>Shop - Bestel nu!</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Mustafa's Whole sale shop !</h1>
+        </div>
+
+        <div class="products-grid">
+            <!--Bottle of Rum -->
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x160?text=Bottle+of+Rum" alt="Bottle of Rum" class="product-image">
+                <div class="product-info">
+                    <div class="product-title">Bottle of Rum</div>
+                    <div class="product-price">€15,00</div>
+                    <button class="add-button" onclick="addToCart('Bottle of Rum', 15)">Voeg toe</button>
+                </div>
+            </div>
+
+            <!-- Olive Oil -->
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x160?text=Olive+Oil" alt="Olive Oil" class="product-image">
+                <div class="product-info">
+                    <div class="product-title">Olive Oil</div>
+                    <div class="product-price">€7,50</div>
+                    <button class="add-button" onclick="addToCart('Olive Oil', 7.5)">Voeg toe</button>
+                </div>
+            </div>
+
+            <!--20 Eggs -->
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x160?text=20+Eggs" alt="20 Eggs" class="product-image">
+                <div class="product-info">
+                    <div class="product-title">20 Eggs</div>
+                    <div class="product-price">€4,00</div>
+                    <button class="add-button" onclick="addToCart('20 Eggs', 4)">Voeg toe</button>
+                </div>
+            </div>
+
+            <!-- Fresh Bead -->
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x160?text=Fresh+Bread" alt="Fresh Bread" class="product-image">
+                <div class="product-info">
+                    <div class="product-title">Fresh Bread</div>
+                    <div class="product-price">€2,75</div>
+                    <button class="add-button" onclick="addToCart('Fresh Bread', 2.75)">Voeg toe</button>
+                </div>
+            </div>
+
+            <!-- Cheese Wheel -->
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x160?text=Cheese+Wheel" alt="Cheese Wheel" class="product-image">
+                <div class="product-info">
+                    <div class="product-title">Cheese Wheel</div>
+                    <div class="product-price">€12,00</div>
+                    <button class="add-button" onclick="addToCart('Cheese Wheel', 12)">Voeg toe</button>
+                </div>
+            </div>
+
+            <!-- Coffe Beans -->
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x160?text=Coffee+Beans" alt="Coffee Beans" class="product-image">
+                <div class="product-info">
+                    <div class="product-title">Coffee Beans</div>
+                    <div class="product-price">€8,50</div>
+                    <button class="add-button" onclick="addToCart('Coffee Beans', 8.5)">Voeg toe </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="cart-summary">
+            <h2>Jouw Bestelling</h2>
+            <ul id="cart-items">
+                <!-- Hiekomen de producten -->
+            </ul>
+            <div id="cart-total">Totaal: €0,00</div>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let total = 0;
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+
+            cartItems.innerHTML = '';
+            total = 0;
+
+
+            cart.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = `${item.name} - €${item.price.toFixed(2)}`;
+                cartItems.appendChild(li);
+                total += item.price;
+            });
+
+
+            cartTotal.textContent = `Totaal: €${total.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>

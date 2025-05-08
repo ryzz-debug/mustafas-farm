@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="adminov.css">
+  <title>Product Overview</title>
+</head>
+
+<body>
+
+  <div id="header-div">
+    <h1 id="head-text">Products in stock</h1>
+    <a id="home-page" href="overview.html">home</a>
+  </div>
+  <div class="add-div">
+    <a id="add-product-btn" href="/admin/add">Add</a>
+  </div>
+  <!-- Products display table -->
+  <table id="products"></table>
+
+  <!-- Rese products button -->
+  <button id="reset-btn" onclick="reset()">Reset</button>
+</body>
+<!-- // -->
+<script>
+  // Reference to the products table
+  const table = document.getElementById("products");
+
+  /**
+   Fetches and displays all products from the server
+   * Creates a table rowfor each product with =
+   *  Product name
+   *  Edit link
+   *  Delete button
+   */
+  fetch("http://localhost:3000/products")
+    .then((response) => {
+      return response.json(); // Parse JSON response
+    })
+    .then((data) => {
+      let html = "";
+
+      // Generate table rows for each product
+      for (let product of data) {
+        html += `
+              <tr class= "tr-div">
+                <td class= "product-name">${product.name}</td>
+                <td class= "edit-name"><a class= "edit-link" href="/admin/${product.id}">Edit</a></td>
+                <td class= "product-id"><button class= "product-btn" onclick="deleteProduct(${product.id})">Delete</button></td>
+              </tr>`;
+      }
+      table.innerHTML = html; // Populate the table
+    });
+
+  /*
+   * Resets all products by calling the reset endpoint
+   * Note: No confirmation dialog or response handling
+   */
+  function reset() {
+    fetch("http://localhost:3000/products/reset", {
+      method: "POST",
+    });
+    // Consider adding .then() to reload or update the list
+  }
+
+  /*
+   * Deletes a specific product by ID
+   * @param {number} id - The ID of the product to delete
+   */
+  function deleteProduct(id) {
+    fetch(`http://localhost:3000/products/${id}`, {
+      method: "DELETE",
+    });
+    // Consider adding .then() to remove the row from the table
+  }
+</script>
+
+</html>
